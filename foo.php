@@ -9,6 +9,8 @@ function foo_form_privatemsg_new_alter(&$form, &$form_state) {
 }
 
 function foo_form_privatemsg_new_validate(&$form, &$form_state) {
+  // @TODO
+  //   set a form_set_error if the user has entered a not allowed user.
 }
 
 /**
