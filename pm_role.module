@@ -39,7 +39,7 @@ function pm_role_access($sender, $recipient) {
   $deny = FALSE;
   foreach ($sender->roles as $rid1 -> $role1) {
     foreach ($recipient->roles as $rid2 -> $role2) {
-      $deny |= variable_get('pm_role_deny_from'. $rid1 .'_to_'. $rid2, FALSE),
+      $deny |= variable_get('pm_role_deny_from'. $rid1 .'_to_'. $rid2, FALSE);
     }
   }
 
@@ -50,15 +50,23 @@ function pm_role_access($sender, $recipient) {
 /*
  * Return all rids which does user is allowed to send messages.
  * This function provides a much much better performance then pm_role_access, exspecially for autocomplete!
- *
  */
 function pm_role_allowed_roles($account = NULL) {
   if (!$account) {
     global $user;
     $account = $user;
   }
-  foreach (user_roles(TRUE) as $rid2 => $role) {
+  foreach (user_roles(TRUE) as $rid2 => $role2) {
+    $deny = FALSE;
+    foreach ($account->roles as $rid -> $role1) {
+      $deny |= variable_get('pm_role_deny_from'. $rid1 .'_to_'. $rid2, FALSE);
+    }
+    if ($deny) {
+      $roles[$rid2] = $role2;
+    }
   }
+
+  return $roles;
 }
 
 /**
