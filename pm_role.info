@@ -1,4 +1,4 @@
 ; $Id$
 name = Privatemsg Role permissions
-description = Adds permissions between roles, wether they can sent mesages to each other.
+description = Adds permissions between roles, wether they can sent messages to each other.
 core = 6.x
