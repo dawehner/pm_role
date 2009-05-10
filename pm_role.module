@@ -50,6 +50,8 @@ function pm_role_access($sender, $recipient) {
 /*
  * Return all rids which does user is allowed to send messages.
  * This function provides a much much better performance then pm_role_access, exspecially for autocomplete!
+ *
+ * @TODO Needs testing.
  */
 function pm_role_allowed_roles($account = NULL) {
   if (!$account) {
