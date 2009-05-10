@@ -3,7 +3,7 @@
 
 /**
  * @TODO
- *   Clean up the settings to remove all allowed items.
+ *   Test cleanup of settings.
  */
 
 function pm_role_admin_settings() {
