@@ -32,14 +32,21 @@ function pm_role_admin_settings() {
 
 function theme_pm_role_admin_settings($form) {
   $roles = user_roles(TRUE);
+
+  $rows[] = $row;
+
+  $header = array();
+  $header[] = '';
   foreach ($roles as $rid1 => $role1) {
+    $header[] = t('%role reciepe', array('%role' => $role1));
     $row = array();
+    $row[] = '<strong>'. t('%role send', array('%role' => $role1)) .'</strong>';
     foreach ($roles as $rid2 => $role2) {
       $row[] = drupal_render($form['pm_role_deny_from_'. $rid1 .'_to_'. $rid2]);
     }
     $rows[] = $row;
   }
-  $output = theme('table', array(), $rows);
+  $output = theme('table', $header, $rows);
 
   $output .= drupal_render($form);
 

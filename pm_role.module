@@ -29,10 +29,6 @@ function pm_role_menu_alter() {
 function pm_role_theme() {
   return array(
     'pm_role_admin_settings' => array(
-      'arguments' => array(
-        'form' => NULL,
-      ),
-      'file' => 'pm_role.admin.inc',
     ),
   );
 }
