@@ -16,11 +16,11 @@ function pm_role_admin_settings() {
         '@role1' => $role1,
         '@role2' => $role2,
       );
-      $form['pm_role_deny_from'. $rid1 .'_to_'. $rid2] = array(
+      $form['pm_role_deny_from_'. $rid1 .'_to_'. $rid2] = array(
         '#type' => 'checkbox',
         '#title' => t('@role1 cannot sent to @role2', $array),
         '#description' => t('@role1 is not allowed to sent messages to @role2', $array),
-        '#default_value' => variable_get('pm_role_deny_from'. $rid1 .'_to_'. $rid2, FALSE),
+        '#default_value' => variable_get('pm_role_deny_from_'. $rid1 .'_to_'. $rid2, FALSE),
       );
     }
   }
@@ -31,7 +31,17 @@ function pm_role_admin_settings() {
 }
 
 function theme_pm_role_admin_settings($form) {
-  $output = drupal_render($form);
+  $roles = user_roles(TRUE);
+  foreach ($roles as $rid1 => $role1) {
+    $row = array();
+    foreach ($roles as $rid2 => $role2) {
+      $row[] = drupal_render($form['pm_role_deny_from_'. $rid1 .'_to_'. $rid2]);
+    }
+    $rows[] = $row;
+  }
+  $output = theme('table', array(), $rows);
+
+  $output .= drupal_render($form);
 
   return $output;
 }
