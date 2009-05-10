@@ -20,7 +20,7 @@ function pm_role_menu() {
  * Implementation of hook_menu_alter().
  */
 function pm_role_menu_alter(&$callbacks) {
-  $callbacks['messages/user-name-autocomplete']['page callback'] = 'pm_role_messages_autocomplete_callback';
+  //$callbacks['messages/user-name-autocomplete']['page callback'] = 'pm_role_messages_autocomplete_callback';
 }
 
 /**
