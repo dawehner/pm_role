@@ -8,6 +8,9 @@
  *     Hat man einmal access denied ists vorbei.
  *   Vorteil:
  *     - Man muss nur denied Settings speichern
+ *
+ * @TODO
+ *   Better function comments.
  */
 
 /**
@@ -42,6 +45,20 @@ function pm_role_access($sender, $recipient) {
 
   // Deny is the opposite of access.
   return !$deny;
+}
+
+/*
+ * Return all rids which does user is allowed to send messages.
+ * This function provides a much much better performance then pm_role_access, exspecially for autocomplete!
+ *
+ */
+function pm_role_allowed_roles($account = NULL) {
+  if (!$account) {
+    global $user;
+    $account = $user;
+  }
+  foreach (user_roles(TRUE) as $rid2 => $role) {
+  }
 }
 
 /**
