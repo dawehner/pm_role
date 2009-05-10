@@ -1,4 +1,5 @@
 ; $Id$
 name = Privatemsg Role permissions
 description = Adds permissions between roles, whether they can sent messages to each other.
+package = Mail
 core = 6.x
