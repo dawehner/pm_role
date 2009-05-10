@@ -22,3 +22,18 @@ function pm_role_admin_settings() {
   return system_settings_form($form);
 }
 
+/**
+ * @TODO
+ *   Needs tests.
+ */
+function pm_role_admin_settings_submit(&$form, $form_state) {
+  foreach ($form_state['values'] as $key => $value) {
+    // take sure we have a access form element
+    if (strpos($key, 'pm_role_deny_') !== FALSE) {
+      if ($value == FALSE) {
+        unset($form_state['values'][$key]);
+      }
+    }
+  }
+}
+
