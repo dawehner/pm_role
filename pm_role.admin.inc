@@ -24,7 +24,16 @@ function pm_role_admin_settings() {
       );
     }
   }
-  return system_settings_form($form);
+  $form = system_settings_form($form);
+  $form['#theme'] = 'pm_role_admin_settings';
+
+  return $form;
+}
+
+function theme_pm_role_admin_settings($form) {
+  $output = drupal_render($form);
+
+  return $output;
 }
 
 /**

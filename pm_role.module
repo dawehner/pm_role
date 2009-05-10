@@ -24,6 +24,20 @@ function pm_role_menu_alter() {
 }
 
 /**
+ * Implementation of hook_theme().
+ */
+function pm_role_theme() {
+  return array(
+    'pm_role_admin_settings' => array(
+      'arguments' => array(
+        'form' => NULL,
+      ),
+      'file' => 'pm_role.admin.inc',
+    ),
+  );
+}
+
+/**
  * @IDEA
  *   Per default darf jeder jedem eine PM schicken,
  *   Aber man kann rolle->rolle definieren ob der zugriff versteckt wird
