@@ -19,8 +19,8 @@ function pm_role_menu() {
 /**
  * Implementation of hook_menu_alter().
  */
-function pm_role_menu_alter() {
-  $callbacks['messages/user-name-autocomplete']['page callback'] = 'foo_messages_autocomplete_callback';
+function pm_role_menu_alter(&$callbacks) {
+  $callbacks['messages/user-name-autocomplete']['page callback'] = 'pm_role_messages_autocomplete_callback';
 }
 
 /**
@@ -60,18 +60,21 @@ function pm_role_form_privatemsg_new_validate(&$form, &$form_state) {
   $author = $form_state['values']['author'];
   $recipient = user_load(array('name' => $form_state['values']['recipient']));
   if (!pm_role_access($author, $recipient)) {
-    form_set_error('privatemsg][recipient]', t('You cannot send a message to !username', theme('username', $recipient)));
+    form_set_error('privatemsg][recipient]', t('You cannot send a message to !username', array('!username' => theme('username', $recipient))));
   }
+  dsm(pm_role_allowed_roles($author));
 }
 
 /**
  * Central access function of this module.
  */
 function pm_role_access($sender, $recipient) {
+  //drupal_set_message('<pre>'. print_r($sender, TRUE) .'</pre>');
   $deny = FALSE;
-  foreach ($sender->roles as $rid1 -> $role1) {
-    foreach ($recipient->roles as $rid2 -> $role2) {
-      $deny |= variable_get('pm_role_deny_from'. $rid1 .'_to_'. $rid2, FALSE);
+  foreach ($sender->roles as $rid1 => $role1) {
+    foreach ($recipient->roles as $rid2 => $role2) {
+      //dsm(variable_get('pm_role_deny_from_'. $rid1 .'_to_'. $rid2, FALSE));
+      $deny |= variable_get('pm_role_deny_from_'. $rid1 .'_to_'. $rid2, FALSE);
     }
   }
 
@@ -92,10 +95,10 @@ function pm_role_allowed_roles($account = NULL) {
   }
   foreach (user_roles(TRUE) as $rid2 => $role2) {
     $deny = FALSE;
-    foreach ($account->roles as $rid -> $role1) {
-      $deny |= variable_get('pm_role_deny_from'. $rid1 .'_to_'. $rid2, FALSE);
+    foreach ($account->roles as $rid1 => $role1) {
+      $deny |= variable_get('pm_role_deny_from_'. $rid1 .'_to_'. $rid2, FALSE);
     }
-    if ($deny) {
+    if (!$deny) {
       $roles[$rid2] = $role2;
     }
   }
@@ -111,6 +114,8 @@ function pm_role_allowed_roles($account = NULL) {
  *   Don't use the default one :)
  */
 function pm_role_messages_autocomplete_callback($string) {
+  global $user;
+  $account = $user;
   $names = array();
   // 1: Parse $string and build list of valid user names.
   $fragments = explode(',', $string);
@@ -128,15 +133,19 @@ function pm_role_messages_autocomplete_callback($string) {
   // 2: Find the next user name suggestion.
   $fragment = array_pop($names);
   if (!empty($fragment)) {
-    $query = "SELECT name FROM {users} u WHERE name like '%s%%'";
+    $query = "SELECT name FROM {users} u";
+    $query .= ' INNER JOIN {users_roles} ur ON u.uid = ur.uid';
+    $query .= " WHERE name like '%s%%'";
     $query .= " AND name NOT IN ('". implode("', '", $names) ."')"; // This will prevent suggesting a name that is already in our list.
+    // @TODO thats not right!
+    $query .= ' AND ur.rid IN ('. implode(', ', array_keys(pm_role_allowed_roles($user))) .')';
     $query .= " AND status <> 0 ORDER BY name ASC";
     $result = db_query_range($query, $fragment, 0, 10);
     $prefix = count($names) ? implode(", ", $names) .", " : '';
     // 3: Build proper suggestions and print.
     $matches = array();
-    while ($user = db_fetch_object($result)) {
-      $matches[$prefix . $user->name .", "] = $user->name;
+    while ($u = db_fetch_object($result)) {
+      $matches[$prefix . $u->name .", "] = $u->name;
     }
     print drupal_to_js($matches);
     exit();
