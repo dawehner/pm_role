@@ -2,6 +2,28 @@
 // $Id$
 
 /**
+ * Implementation of hook_menu().
+ */
+function pm_role_menu() {
+  $items['admin/settings/pm_role_settings'] = array(
+    'title' => 'Pm Role settings',
+    'page callback' => 'drupal_get_form',
+    'page arguments' => array('pm_role_admin_settings'),
+    'access arguments' => array('administer site configuration'),
+    'file' => 'pm_role.admin.inc',
+  );
+
+  return $items;
+}
+
+/**
+ * Implementation of hook_menu_alter().
+ */
+function pm_role_menu_alter() {
+  $callbacks['messages/user-name-autocomplete']['page callback'] = 'foo_messages_autocomplete_callback';
+}
+
+/**
  * @IDEA
  *   Per default darf jeder jedem eine PM schicken,
  *   Aber man kann rolle->rolle definieren ob der zugriff versteckt wird
@@ -69,28 +91,6 @@ function pm_role_allowed_roles($account = NULL) {
   }
 
   return $roles;
-}
-
-/**
- * Implementation of hook_menu().
- */
-function pm_role_menu() {
-  $items['admin/settings/pm_role_settings'] = array(
-    'title' => 'Pm Role settings',
-    'page callback' => 'drupal_get_form',
-    'page arguments' => array('pm_role_admin_settings'),
-    'access arguments' => array('administer site configuration'),
-    'file' => 'pm_role.admin.inc',
-  );
-
-  return $items;
-}
-
-/**
- * Implementation of hook_menu_alter().
- */
-function pm_role_menu_alter() {
-  $callbacks['messages/user-name-autocomplete']['page callback'] = 'foo_messages_autocomplete_callback';
 }
 
 /**
