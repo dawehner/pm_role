@@ -2,6 +2,15 @@
 // $Id$
 
 /**
+ * @IDEA
+ *   Per default darf jeder jedem eine PM schicken,
+ *   Aber man kann rolle->rolle definieren ob der zugriff versteckt wird
+ *     Hat man einmal access denied ists vorbei.
+ *   Vorteil:
+ *     - Man muss nur denied Settings speichern
+ */
+
+/**
  * Implementation of hook_form_privatemsg_new_alter().
  */
 function pm_role_form_privatemsg_new_alter(&$form, &$form_state) {
@@ -11,6 +20,21 @@ function pm_role_form_privatemsg_new_alter(&$form, &$form_state) {
 function pm_role_form_privatemsg_new_validate(&$form, &$form_state) {
   // @TODO
   //   set a form_set_error if the user has entered a not allowed user.
+}
+
+/**
+ * Central access function of this module.
+ */
+function pm_role_access($sender, $recipient) {
+  $deny = FALSE;
+  foreach ($sender->roles as $rid1 -> $role1) {
+    foreach ($recipient->roles as $rid2 -> $role2) {
+      $deny |= variable_get('pm_role_deny_from'. $rid1 .'_to_'. $rid2, FALSE),
+    }
+  }
+
+  // Deny is the opposite of access.
+  return !$deny;
 }
 
 /**
