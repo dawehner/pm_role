@@ -1,8 +1,6 @@
 <?php
 // $Id$
 
-// @TODO deside whether this module should be a deny or allow module :)
-
 function pm_role_admin_settings() {
   $form = array();
   $roles = user_roles(TRUE);

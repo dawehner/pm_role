@@ -1,0 +1,15 @@
+<?php
+// $Id$
+
+class pmRoleTestCase extends DrupalWebTestCase {
+  static function getInfo() {
+    return array(
+      'name' => t('Privatemsg Role Permission.'),
+      'group' => t('Privatemsg'),
+    );
+  }
+
+  function setUp() {
+    parent::setUp('privatemsg', 'pm_role');
+  }
+}
