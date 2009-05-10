@@ -62,7 +62,6 @@ function pm_role_form_privatemsg_new_validate(&$form, &$form_state) {
   if (!pm_role_access($author, $recipient)) {
     form_set_error('privatemsg][recipient]', t('You cannot send a message to !username', array('!username' => theme('username', $recipient))));
   }
-  dsm(pm_role_allowed_roles($author));
 }
 
 /**
