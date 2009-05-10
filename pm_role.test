@@ -12,4 +12,9 @@ class pmRoleTestCase extends DrupalWebTestCase {
   function setUp() {
     parent::setUp('privatemsg', 'pm_role');
   }
+
+  // Tests central access function.
+  function testPmRoleAccessFunction() {
+  }
 }
+
